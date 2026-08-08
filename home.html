@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CertifyCraft Studio - Professional Certificate Creator</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600;700;800&family=Great+Vibes&family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Design System CSS -->
+    <link rel="stylesheet" href="style.css?v=107">
+</head>
+<body>
+
+    <!-- AMBIENT GLOW BACKGROUND LIGHTS -->
+    <div class="ambient-glow-container">
+        <div class="ambient-blob ambient-blob-1"></div>
+        <div class="ambient-blob ambient-blob-2"></div>
+        <div class="ambient-blob ambient-blob-3"></div>
+    </div>
+
+    <!-- APP HEADER -->
+    <header class="app-header">
+        <div class="brand-section">
+            <div class="brand-logo" onclick="window.location.reload()">
+                <i class="fa-solid fa-graduation-cap"></i> CertifyCraft Studio
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="user-badge" id="homeUserBadge" style="display: none;">
+                <div class="user-avatar" id="homeUserAvatar">U</div>
+                <span id="homeUserEmailSpan">user@gmail.com</span>
+                <button onclick="handleHomeLogout()" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:700; margin-left:6px;" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+            <button class="btn-header btn-download" id="homeLoginBtn" onclick="openHomeLoginModal()">
+                <i class="fa-solid fa-right-to-bracket"></i> Login / Sign In
+            </button>
+            <button class="btn-header btn-create-blank" onclick="handleTemplateClick(0)">
+                <i class="fa-solid fa-plus-circle"></i> Create Blank Certificate
+            </button>
+            <button class="btn-header btn-change-tpl" onclick="handleTemplateClick(10)">
+                <i class="fa-solid fa-pen-to-square"></i> Open Studio Editor
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="hero-badge">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> AI & Pro Studio Certificate Creator
+        </div>
+        <h1 class="hero-title">Create & Customize Official College Certificates in Seconds</h1>
+        <p class="hero-subtitle">
+            Design high-resolution degrees, diplomas, internship completion letters, and academic honor awards with our drag-and-drop studio editor.
+        </p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="handleTemplateClick(0)" class="btn-launch" style="background: linear-gradient(135deg, #a855f7, #06b6d4);">
+                <i class="fa-solid fa-plus-circle"></i> Create Blank Certificate
+            </button>
+            <button onclick="handleTemplateClick(10)" class="btn-launch" style="background: rgba(30, 41, 59, 0.85); border: 1px solid var(--border-glass);">
+                <i class="fa-solid fa-border-all"></i> Explore 50+ College Templates
+            </button>
+        </div>
+
+        <!-- STATS COUNTER BAR -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-num">38+</div>
+                <div class="stat-label">College Templates</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">100%</div>
+                <div class="stat-label">Free & Editable</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">High-Res</div>
+                <div class="stat-label">Vector PDF Export</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">QR Code</div>
+                <div class="stat-label">Instant Verification</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FILTER & SEARCH BAR SECTION -->
+    <div class="home-filter-section">
+        <div class="home-search-wrapper">
+            <i class="fa-solid fa-magnifying-glass home-search-icon"></i>
+            <input type="text" class="home-search-input" id="homeSearchInput" placeholder="Search templates (e.g. B.Tech, Diploma, Honors, Sports)..." oninput="filterHomeTemplates()">
+        </div>
+
+        <!-- CATEGORY FILTER PILLS -->
+        <div class="category-filter-bar" id="homeCategoryBar">
+            <button class="category-btn active" onclick="filterHomeCategory('all', this)">All Templates (38)</button>
+            <button class="category-btn" onclick="filterHomeCategory('completion', this)">🎓 Degree & Completion</button>
+            <button class="category-btn" onclick="filterHomeCategory('honors', this)">🏆 Academic Honors & Excellence</button>
+            <button class="category-btn" onclick="filterHomeCategory('events', this)">🎭 Campus Events & Sports</button>
+        </div>
+    </div>
+
+    <!-- GALLERY SECTION -->
+    <section class="templates-gallery-section">
+        <h2 class="section-title">Explore College & University Certificate Designs</h2>
+        
+        <div class="home-template-grid" id="homeTemplateGrid">
+
+        <!-- 0. CREATE CUSTOM BLANK CERTIFICATE CARD -->
+        <div class="home-tpl-card create-blank-card" data-category="all completion honors events" data-title="Create Blank Certificate" onclick="handleTemplateClick(0)" style="border: 2px dashed #a855f7; background: rgba(168, 85, 247, 0.08);">
+            <div class="home-tpl-preview" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: #c084fc; border: 2px dashed #a855f7; display: flex; flex-direction: column; gap: 8px;">
+                <i class="fa-solid fa-pen-ruler" style="font-size: 36px; color: #a855f7;"></i>
+                <span style="font-weight: 800; font-size: 15px;">Start from Blank Canvas</span>
+            </div>
+            <h3 style="font-size: 15px; font-weight: 800; margin-top: 12px; color: #c084fc;">✨ Create Custom Certificate</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Design your own custom certificate with custom fonts, colors, and frames from scratch.</p>
+        </div>
+
+        <div class="home-tpl-card" data-category="completion" data-title="Certificate of Completion" onclick="handleTemplateClick(1)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Certificate of Completion
+            </div>
+            <h3 class="home-tpl-title">Certificate of Completion</h3>
+            <p class="home-tpl-desc">Professional Studio Certificate Design</p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Diploma of Completion" onclick="handleTemplateClick(2)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Diploma of Completion
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Diploma of Completion</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Internship Completion" onclick="handleTemplateClick(3)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Internship Completion
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Internship Completion</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Course Completion" onclick="handleTemplateClick(4)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Course Completion
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Course Completion</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Training Program" onclick="handleTemplateClick(5)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Training Program
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Training Program</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Workshop Participation" onclick="handleTemplateClick(6)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Workshop Participation
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Workshop Participation</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Project Completion" onclick="handleTemplateClick(7)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Project Completion
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Project Completion</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Online Course Certificate" onclick="handleTemplateClick(8)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Online Course Certificate
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Online Course Certificate</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="Certificate of Achievement" onclick="handleTemplateClick(9)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Certificate of Achievement
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Certificate of Achievement</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="Gold Executive Appreciation (Exact Match)" onclick="handleTemplateClick(10)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #ca8a04; border: 4px double #ca8a04;">
+                🏆 Gold Executive Appreciation (Exact Match)
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Gold Executive Appreciation (Exact Match)</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="B.Sc Honors Science" onclick="handleTemplateClick(11)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 B.Sc Honors Science
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">B.Sc Honors Science</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="B.Tech Computer Engg" onclick="handleTemplateClick(12)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 B.Tech Computer Engg
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">B.Tech Computer Engg</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="Ph.D Doctorate Graduation" onclick="handleTemplateClick(13)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Ph.D Doctorate Graduation
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Ph.D Doctorate Graduation</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="MBBS Medical Graduate" onclick="handleTemplateClick(14)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 MBBS Medical Graduate
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">MBBS Medical Graduate</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="B.Com Finance Degree" onclick="handleTemplateClick(15)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 B.Com Finance Degree
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">B.Com Finance Degree</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="M.Sc Biotechnology" onclick="handleTemplateClick(16)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 M.Sc Biotechnology
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">M.Sc Biotechnology</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="College Sports Champion" onclick="handleTemplateClick(17)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 College Sports Champion
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">College Sports Champion</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="NSS Community Service" onclick="handleTemplateClick(18)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 NSS Community Service
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">NSS Community Service</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Youth Fest Winner" onclick="handleTemplateClick(19)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Youth Fest Winner
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Youth Fest Winner</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="National Hackathon Winner" onclick="handleTemplateClick(20)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 National Hackathon Winner
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">National Hackathon Winner</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="B.Arch Architecture" onclick="handleTemplateClick(21)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 B.Arch Architecture
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">B.Arch Architecture</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="LL.B Law Degree" onclick="handleTemplateClick(22)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 LL.B Law Degree
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">LL.B Law Degree</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="Student Council Senate" onclick="handleTemplateClick(23)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Student Council Senate
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Student Council Senate</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="MCA Software Degree" onclick="handleTemplateClick(24)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 MCA Software Degree
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">MCA Software Degree</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="Merit Scholarship Award" onclick="handleTemplateClick(25)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Merit Scholarship Award
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Merit Scholarship Award</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Debate Oratory Winner" onclick="handleTemplateClick(26)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Debate Oratory Winner
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Debate Oratory Winner</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Environmental Sciences" onclick="handleTemplateClick(27)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Environmental Sciences
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Environmental Sciences</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="University Valedictorian" onclick="handleTemplateClick(28)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 University Valedictorian
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">University Valedictorian</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="AI & Data Science Award" onclick="handleTemplateClick(29)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 AI & Data Science Award
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">AI & Data Science Award</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Cloud Computing Architect" onclick="handleTemplateClick(30)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Cloud Computing Architect
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Cloud Computing Architect</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Graphic Design & Arts" onclick="handleTemplateClick(31)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Graphic Design & Arts
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Graphic Design & Arts</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Digital Marketing Lead" onclick="handleTemplateClick(32)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Digital Marketing Lead
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Digital Marketing Lead</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Cyber Security Specialist" onclick="handleTemplateClick(33)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Cyber Security Specialist
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Cyber Security Specialist</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Full Stack Dev Certificate" onclick="handleTemplateClick(34)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Full Stack Dev Certificate
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Full Stack Dev Certificate</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="Executive Leadership Award" onclick="handleTemplateClick(35)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Executive Leadership Award
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Executive Leadership Award</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Aviation Engineering" onclick="handleTemplateClick(36)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Aviation Engineering
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Aviation Engineering</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Performing Arts & Music" onclick="handleTemplateClick(37)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Performing Arts & Music
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Performing Arts & Music</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Robotics & Automation" onclick="handleTemplateClick(38)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Robotics & Automation
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Robotics & Automation</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="Chartered Accountancy" onclick="handleTemplateClick(39)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Chartered Accountancy
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Chartered Accountancy</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Journalism & Mass Comm" onclick="handleTemplateClick(40)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Journalism & Mass Comm
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Journalism & Mass Comm</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Business Analytics Lead" onclick="handleTemplateClick(41)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Business Analytics Lead
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Business Analytics Lead</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Renewable Energy Honor" onclick="handleTemplateClick(42)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Renewable Energy Honor
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Renewable Energy Honor</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Global Student Exchange" onclick="handleTemplateClick(43)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Global Student Exchange
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Global Student Exchange</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Blockchain Developer" onclick="handleTemplateClick(44)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Blockchain Developer
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Blockchain Developer</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Supply Chain Management" onclick="handleTemplateClick(45)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Supply Chain Management
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Supply Chain Management</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="HR Executive Award" onclick="handleTemplateClick(46)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 HR Executive Award
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">HR Executive Award</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="completion" data-title="Hotel Management Lead" onclick="handleTemplateClick(47)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Hotel Management Lead
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Hotel Management Lead</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Psychology & Brain Science" onclick="handleTemplateClick(48)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Psychology & Brain Science
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Psychology & Brain Science</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="events" data-title="Event Management Lead" onclick="handleTemplateClick(49)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Event Management Lead
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Event Management Lead</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    
+        <div class="home-tpl-card" data-category="honors" data-title="Valedictorian Gold Medalist" onclick="handleTemplateClick(50)">
+            <div class="home-tpl-preview" style="background: #ffffff; color: #0f172a; border: 3px solid #7c3aed;">
+                🏆 Valedictorian Gold Medalist
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 12px; color: #f8fafc;">Valedictorian Gold Medalist</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Professional Studio Certificate Design </p>
+        </div>
+    </div>
+    </section>
+
+    <!-- FEATURE HIGHLIGHTS SECTION -->
+    <section class="features-section">
+        <h2 class="section-title">Built for Modern Educational Institutions</h2>
+        <p class="section-subtitle">Everything you need to create, issue, and verify professional certificates — all in one place.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon-wrap"><i class="fa-solid fa-hand-pointer"></i></div>
+                <h3 class="feature-title">Interactive Drag &amp; Drop Studio</h3>
+                <p class="feature-desc">Easily add text, signatures, seals, badges, logos, and custom graphics onto any canvas layer.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrap"><i class="fa-solid fa-medal"></i></div>
+                <h3 class="feature-title">Custom Medals &amp; Wax Seals</h3>
+                <p class="feature-desc">Generate official gold rosettes, security badges, and university insignia emblems in one click.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrap"><i class="fa-solid fa-qrcode"></i></div>
+                <h3 class="feature-title">Instant QR Code Verification</h3>
+                <p class="feature-desc">Embed verifiable QR codes linked directly to student credentials for tamper-proof security.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrap"><i class="fa-solid fa-file-arrow-down"></i></div>
+                <h3 class="feature-title">One-Click PDF Export</h3>
+                <p class="feature-desc">Download crisp, high-resolution A4 landscape PDF files ready for high-grade printing.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <div class="footer-brand">
+            <i class="fa-solid fa-graduation-cap" style="color: #a855f7;"></i> CertifyCraft Studio
+        </div>
+        <p>© 2026 CertifyCraft Studio. All rights reserved. Built for Colleges & Universities.</p>
+    </footer>
+
+    <!-- AUTH LOGIN MODAL -->
+    <div class="modal-overlay" id="authLoginModal" style="display: none;">
+        <div class="modal-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h2 class="modal-title" style="margin: 0;">🔑 User Login</h2>
+                <button onclick="closeHomeLoginModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="modal-subtitle">Login to access Certificate Studio & templates</p>
+
+            <form onsubmit="handleHomeLoginSubmit(event)">
+                <div class="form-group">
+                    <label>Email or Phone</label>
+                    <input type="text" class="form-input" id="homeLoginEmail" placeholder="Enter Email" required value="ishwari@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-input" placeholder="Enter Password" required value="123456">
+                </div>
+                <button type="submit" class="btn-login-submit">Login & Launch Studio</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let pendingTemplateTarget = 10;
+        let activeCategory = 'all';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('cert_user');
+            if (!savedUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            checkUserLoginStatus();
+        });
+
+        function checkUserLoginStatus() {
+            const savedUser = localStorage.getItem('cert_user');
+            const loginBtn = document.getElementById('homeLoginBtn');
+            const userBadge = document.getElementById('homeUserBadge');
+
+            if (savedUser) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (userBadge) {
+                    userBadge.style.display = 'flex';
+                    const displayChar = savedUser.replace(/[^a-zA-Z0-9]/g, '').charAt(0).toUpperCase() || 'U';
+                    document.getElementById('homeUserAvatar').innerText = displayChar;
+                    document.getElementById('homeUserEmailSpan').innerText = savedUser;
+                }
+                return true;
+            } else {
+                window.location.href = 'login.html';
+                return false;
+            }
+        }
+
+        function openHomeLoginModal() {
+            window.location.href = 'login.html';
+        }
+
+        function closeHomeLoginModal() {
+            document.getElementById('authLoginModal').style.display = 'none';
+        }
+
+        function handleHomeLoginSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('homeLoginEmail').value.trim();
+            localStorage.setItem('cert_user', email);
+            checkUserLoginStatus();
+            closeHomeLoginModal();
+            window.location.href = 'editor.html?tpl=' + pendingTemplateTarget;
+        }
+
+        function handleHomeLogout() {
+            localStorage.removeItem('cert_user');
+            localStorage.removeItem('cert_login_type');
+            window.location.href = 'login.html';
+        }
+
+        function handleTemplateClick(tplNum) {
+            pendingTemplateTarget = tplNum;
+            const savedUser = localStorage.getItem('cert_user');
+            if (savedUser) {
+                window.location.href = 'editor.html?tpl=' + tplNum;
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+
+        function filterHomeCategory(category, btnElem) {
+            activeCategory = category;
+            const buttons = document.querySelectorAll('#homeCategoryBar .category-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElem.classList.add('active');
+            filterHomeTemplates();
+        }
+
+        function filterHomeTemplates() {
+            const query = document.getElementById('homeSearchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('#homeTemplateGrid .home-tpl-card');
+
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                const cardTitle = (card.getAttribute('data-title') || '').toLowerCase();
+                const cardText = card.innerText.toLowerCase();
+
+                const matchesCat = (activeCategory === 'all' || cardCat === activeCategory);
+                const matchesQuery = !query || cardTitle.includes(query) || cardText.includes(query);
+
+                if (matchesCat && matchesQuery) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
