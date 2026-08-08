@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Certificate</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- QR Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="certificate" id="certificate">
+
+    <h1>Certificate of Completion</h1>
+
+    <p>This is to certify that</p>
+
+    <h2 id="name">Your Name</h2>
+
+    <p>has completed the course</p>
+
+    <h3 id="course">Course Name</h3>
+
+    <!-- NEW EMAIL -->
+    <p>Email: <span id="email">example@gmail.com</span></p>
+
+    <p>Date: <span id="date">2026</span></p>
+
+    <!-- SIGNATURE -->
+    <div class="signature">
+        <p>______________________</p>
+        <p>Authorized Signature</p>
+    </div>
+
+    <!-- QR -->
+    <div id="qrcode"></div>
+
+</div>
+
+<!-- EDIT BOX -->
+<div class="edit-box">
+
+    <input id="inputName" placeholder="Enter Name">
+    <input id="inputCourse" placeholder="Enter Course">
+    <input id="inputEmail" placeholder="Enter Email">
+    <input id="inputDate" type="date">
+
+    <button onclick="updateData()">Update</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+
+</div>
+
+<script>
+function updateData() {
+    let name = document.getElementById("inputName").value;
+    let course = document.getElementById("inputCourse").value;
+    let email = document.getElementById("inputEmail").value;
+    let date = document.getElementById("inputDate").value;
+
+    if(name === "" || course === "" || email === "" || date === "") {
+        alert("Please fill all fields");
+        return;
+    }
+
+    document.getElementById("name").innerText = name;
+    document.getElementById("course").innerText = course;
+    document.getElementById("email").innerText = email;
+
+    let formattedDate = new Date(date).toLocaleDateString();
+    document.getElementById("date").innerText = formattedDate;
+
+    // QR update
+    document.getElementById("qrcode").innerHTML = "";
+    new QRCode(document.getElementById("qrcode"), {
+        text: name + " | " + course + " | " + email,
+        width: 100,
+        height: 100
+    });
+}
+
+function downloadPDF() {
+    let name = document.getElementById("inputName").value;
+    const element = document.getElementById("certificate");
+
+    html2pdf().from(element).save(name + "_certificate.pdf");
+}
+</script>
+
+</body>
+</html>

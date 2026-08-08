@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CertifyCraft Studio - Official Certificate Verification</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600;700;800&family=Great+Vibes&family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Design System CSS -->
+    <link rel="stylesheet" href="style.css?v=99">
+
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        body {
+            background-color: #090d16;
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .verify-container {
+            max-width: 1000px;
+            margin: 40px auto 80px auto;
+            padding: 0 20px;
+        }
+
+        .verify-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .status-badge-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 24px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #10b981;
+            color: #34d399;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+            margin-bottom: 24px;
+        }
+
+        .status-badge-error {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 24px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #f87171;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #334155;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .meta-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-top: 4px;
+        }
+
+        .preview-wrapper {
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+
+        .cert-render-box {
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            border-radius: 4px;
+            transform-origin: top center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- APP HEADER -->
+    <header class="app-header">
+        <div class="brand-section">
+            <div class="brand-logo" onclick="window.location.href='home.html'">
+                <i class="fa-solid fa-graduation-cap"></i> CertifyCraft Studio
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="home.html" class="btn-header btn-change-tpl">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+            <a href="editor.html" class="btn-header btn-download">
+                <i class="fa-solid fa-pen-to-square"></i> Studio Editor
+            </a>
+        </div>
+    </header>
+
+    <div class="verify-container">
+        <!-- VERIFICATION CARD -->
+        <div class="verify-card" id="verifyCard">
+            
+            <div id="loadingState" style="text-align: center; padding: 40px;">
+                <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 40px; color: #a855f7;"></i>
+                <h3 style="margin-top: 16px; font-weight: 700;">Verifying Certificate Records...</h3>
+            </div>
+
+            <!-- SUCCESS VERIFIED STATE -->
+            <div id="verifiedState" style="display: none;">
+                <div style="text-align: center;">
+                    <div class="status-badge-verified">
+                        <i class="fa-solid fa-circle-check"></i> OFFICIALLY VERIFIED CERTIFICATE
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">Authentic Academic Record</h1>
+                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px;">This certificate has been issued and verified via CertifyCraft Digital Verification Network.</p>
+                </div>
+
+                <!-- METADATA GRID -->
+                <div class="meta-grid">
+                    <div>
+                        <div class="meta-label">Certificate ID</div>
+                        <div class="meta-value" id="resCertId" style="color: #a855f7;">CERT-000000</div>
+                    </div>
+                    <div>
+                        <div class="meta-label">Student Name</div>
+                        <div class="meta-value" id="resStudentName">-</div>
+                    </div>
+                    <div>
+                        <div class="meta-label">Course / Award</div>
+                        <div class="meta-value" id="resCourseName">-</div>
+                    </div>
+                    <div>
+                        <div class="meta-label">Date of Issue</div>
+                        <div class="meta-value" id="resIssueDate">-</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h3 style="font-size: 18px; font-weight: 700;">Official Certificate Copy:</h3>
+                    <button class="btn-header btn-save-db" onclick="downloadVerifiedPDF()">
+                        <i class="fa-solid fa-download"></i> Download Official PDF
+                    </button>
+                </div>
+
+                <!-- RENDERED CERTIFICATE CANVAS -->
+                <div class="preview-wrapper">
+                    <div id="certContainer" class="cert-render-box">
+                        <!-- Loaded certificate HTML inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOT FOUND / ERROR STATE -->
+            <div id="errorState" style="display: none; text-align: center; padding: 20px;">
+                <div class="status-badge-error">
+                    <i class="fa-solid fa-circle-xmark"></i> CERTIFICATE NOT FOUND
+                </div>
+                <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 12px;">Invalid or Unverified Certificate ID</h2>
+                <p style="color: #94a3b8; max-width: 500px; margin: 0 auto 24px auto;">The certificate ID you scanned or requested could not be found in our database repository.</p>
+
+                <div style="max-width: 400px; margin: 0 auto; display: flex; gap: 10px;">
+                    <input type="text" id="manualCertId" class="form-input" placeholder="Enter Certificate ID (e.g. CERT-8492A1B)">
+                    <button class="btn-header btn-download" onclick="verifyManualId()">Verify</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentCertData = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const certId = urlParams.get('id');
+
+            if (certId) {
+                fetchCertificate(certId);
+            } else {
+                showErrorState();
+            }
+        });
+
+        function getApiBaseUrl() {
+            if (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '8000')) {
+                return 'http://localhost:8000';
+            }
+            return '';
+        }
+
+        async function fetchCertificate(certId) {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('verifiedState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+
+            const baseUrl = getApiBaseUrl();
+
+            try {
+                const res = await fetch(`${baseUrl}/certificate/${certId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    currentCertData = data;
+                    renderVerifiedData(data);
+                    return;
+                }
+            } catch (err) {
+                console.warn("Backend fetch failed, checking local storage:", err);
+            }
+
+            // LocalStorage fallback
+            const localCerts = JSON.parse(localStorage.getItem('cert_storage_list') || '[]');
+            const localCert = localCerts.find(c => c.certificate_id === certId);
+            if (localCert) {
+                currentCertData = localCert;
+                renderVerifiedData(localCert);
+            } else {
+                showErrorState();
+            }
+        }
+
+        function renderVerifiedData(data) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('verifiedState').style.display = 'block';
+
+            document.getElementById('resCertId').innerText = data.certificate_id;
+            document.getElementById('resStudentName').innerText = data.student_name;
+            document.getElementById('resCourseName').innerText = data.course_name;
+            document.getElementById('resIssueDate').innerText = data.issue_date;
+
+            const container = document.getElementById('certContainer');
+            if (data.certificate_html) {
+                container.innerHTML = data.certificate_html;
+            } else {
+                container.innerHTML = `
+                    <div class="certificate-canvas tpl-10-design" style="width: 842px; height: 595px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center;">
+                        <h1 style="font-family: 'Cinzel', serif; color: #0f2038; font-size: 36px; margin-bottom: 20px;">CERTIFICATE OF ACCOMPLISHMENT</h1>
+                        <p style="font-size: 16px; color: #475569;">This is to certify that</p>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 42px; color: #0f2038; margin: 15px 0;">${data.student_name}</h2>
+                        <p style="font-size: 16px; color: #475569;">has successfully completed</p>
+                        <h3 style="font-family: 'Montserrat', sans-serif; font-size: 24px; color: #1e3a8a; margin: 10px 0;">${data.course_name}</h3>
+                        <p style="font-size: 14px; color: #64748b; margin-top: 30px;">Issued on ${data.issue_date} • Verification ID: ${data.certificate_id}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function showErrorState() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('verifiedState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+        }
+
+        function verifyManualId() {
+            const inputVal = document.getElementById('manualCertId').value.trim();
+            if (inputVal) {
+                window.location.href = `verify.html?id=${inputVal}`;
+            }
+        }
+
+        function downloadVerifiedPDF() {
+            const element = document.getElementById('certContainer');
+            const certId = currentCertData ? currentCertData.certificate_id : 'Certificate';
+            
+            const opt = {
+                margin:       0,
+                filename:     `${certId}_Verified.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'px', format: [842, 595], orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
